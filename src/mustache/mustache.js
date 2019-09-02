@@ -1,3 +1,7 @@
+import Context from "./context.js"
+import Scanner from "./scanner.js"
+import Writer from "./writer.js"
+
 const mustache = {};
 const objectToString = Object.prototype.toString;
 const isArray = Array.isArray || function isArrayPolyfill(object) {
