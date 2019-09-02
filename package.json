@@ -1,5 +1,5 @@
 {
-  "name": "SegmentUI",
+  "name": "segmentui",
   "version": "0.0.0",
   "description": "A new way of building frontend UI, from the backend",
   "main": "src/segment.js",
