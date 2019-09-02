@@ -1,6 +1,6 @@
 /* Copyright Arthur Guiot 2019, SegmentUI */
 const fs = require("fs")
-
+import Mustache from "../mustache/mustache.js"
 function guard(cond, msg) {
 	if (cond === false) {
 		throw msg
@@ -19,20 +19,27 @@ function load(ctx) {
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
 		const name = file.split(".")[0]
 		this.layouts[name] = function(page) {
-			// TODO: render page
+			// MARK: render page
+			fs.readFile(this.path, (err, data) => {
+				const d = Mustache.render(data, { content: page })
+				switch (this.S.server) {
+					case "express":
+						this.S.P.res.send(d)
+						break;
+					default:
+						this.S.P.res.write(d)
+				}
+			})
 		}.bind({
-			path: file
+			path: file,
+			S: this
 		})
 	})
 
 	// Components
 	fs.readdirSync(this.dirname + "/Components").forEach(file => {
 		const name = file.split(".")[0]
-		this.components[name] = function(params) {
-			// TODO: render component
-		}.bind({
-			path: file
-		})
+		this.components[name] = fs.readFileSync(file)
 	})
 }
 
