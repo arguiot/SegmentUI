@@ -8,7 +8,7 @@ function guard(cond, msg) {
 
 function serve(page, p, type="http") {
 	// Imports controller
-
+	this.server = type
 	const P = require(`${this.dirname}/Views/${page}/index.js`)
 	this.current = new P(p, this)
 }
