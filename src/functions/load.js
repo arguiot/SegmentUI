@@ -11,9 +11,9 @@ function load(ctx) {
 	this.dirname = ctx
 
 	// Check structure
-	guard(fs.existsSync(this.dirname + "/Components"))
-	guard(fs.existsSync(this.dirname + "/Layout"))
-	guard(fs.existsSync(this.dirname + "/Views"))
+	guard(fs.existsSync(this.dirname + "/Components"), "Couldn't verify folder structure")
+	guard(fs.existsSync(this.dirname + "/Layout"), "Couldn't verify folder structure")
+	guard(fs.existsSync(this.dirname + "/Views"), "Couldn't verify folder structure")
 
 	// Layouts
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
