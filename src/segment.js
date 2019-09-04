@@ -3,6 +3,7 @@
 import load from "./functions/load.js"
 import serve from "./functions/serve.js"
 import compile from "./functions/compile.js"
+import end from "./functions/end.js"
 class SegmentUI {
 	constructor() {
 		this.layouts = {}
@@ -28,6 +29,10 @@ class SegmentUI {
 	}
 	compile() {
 		const f = compile.bind(this)
+		f(...arguments)
+	}
+	end() {
+		const f = end.bind(this)
 		f(...arguments)
 	}
 }
