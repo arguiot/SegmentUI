@@ -2,8 +2,14 @@
   "name": "segmentui",
   "version": "0.0.0",
   "description": "A new way of building frontend UI, from the backend",
-  "main": "src/segment.js",
+  "main": "dist/segment.js",
   "repository": "https://github.com/arguiot/SegmentUI",
   "author": "Arthur Guiot <arguiot@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "rollup src/segment.js --file dist/segment.js --format cjs --intro \"/* Copyright © 2019 Arthur Guiot */\""
+  },
+  "devDependencies": {
+    "rollup": "^1.20.3"
+  }
 }
