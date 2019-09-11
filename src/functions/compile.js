@@ -11,8 +11,8 @@ function guard(cond, msg) {
 function compile(file, callback) {
 	const page = `${this.dirname}/Views/${this.page}/${file}.html`
 	// MARK: render page
-	fs.readFile(this.path, (err, data) => {
-		const d = Mustache.render(data, this.components)
+	fs.readFile(page, (err, data) => {
+		const d = Mustache.render(data.toString(), this.components)
 		callback(d)
 	})
 }

@@ -18,20 +18,33 @@ function load(ctx) {
 	// Layouts
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
 		const name = file.split(".")[0]
-		this.layouts[name] = function(page) {
+		this.layouts[name] = function(callback) {
 			// MARK: render page
 			fs.readFile(this.path, (err, data) => {
-				const d = Mustache.render(data, { content: page })
+				const d = data.toString()
+				const s = d.split("{{content}}")
 				switch (this.S.server) {
 					case "express":
-						this.S.P.res.send(d)
+						this.S.P.res.send(s[0])
 						break;
 					default:
-						this.S.P.res.write(d)
+						this.S.P.res.write(s[0])
+				}
+				if (s.length > 1) {
+					callback(function(send) {
+						switch (this.S.server) {
+							case "express":
+								this.S.P.res.send(send)
+								break;
+							default:
+								this.S.P.res.write(send)
+						}
+					}.bind(this))
+					this.S.last = s[1]
 				}
 			})
 		}.bind({
-			path: file,
+			path: `${this.dirname}/Layout/${file}`,
 			S: this
 		})
 	})
@@ -39,7 +52,7 @@ function load(ctx) {
 	// Components
 	fs.readdirSync(this.dirname + "/Components").forEach(file => {
 		const name = file.split(".")[0]
-		this.components[name] = fs.readFileSync(file)
+		this.components[name] = fs.readFileSync(`${this.dirname}/Components/${file}`)
 	})
 }
 

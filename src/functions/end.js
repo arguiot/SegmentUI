@@ -1,7 +1,11 @@
 /* Copyright Arthur Guiot 2019, SegmentUI */
 
 function end() {
-	this.P.req.end(...arguments)
+	if (typeof this.last != "undefined") {
+		this.P.res.end(this.last)
+		return
+	}
+	this.P.res.end(...arguments)
 }
 
 export default end
