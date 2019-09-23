@@ -8,11 +8,12 @@ function guard(cond, msg) {
 	}
 }
 
-function compile(file, callback) {
+function compile(file, callback, object = {}) {
 	const page = `${this.dirname}/Views/${this.page}/${file}.html`
 	// MARK: render page
 	fs.readFile(page, (err, data) => {
-		const d = Mustache.render(data.toString(), this.components)
+		const obj = Object.assign(this.components, object)
+		const d = Mustache.render(data.toString(), obj)
 		callback(d)
 	})
 }

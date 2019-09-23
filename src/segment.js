@@ -4,6 +4,7 @@ import load from "./functions/load.js"
 import serve from "./functions/serve.js"
 import compile from "./functions/compile.js"
 import end from "./functions/end.js"
+import Mustache from "./mustache/mustache.js"
 class SegmentUI {
 	constructor() {
 		this.layouts = {}
@@ -16,6 +17,10 @@ class SegmentUI {
 	}
 	get http() {
 		return "http"
+	}
+
+	get Mustache() {
+		return Mustache
 	}
 
 	/* Functions */

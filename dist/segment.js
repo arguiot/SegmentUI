@@ -787,11 +787,12 @@ function serve(page, p, type="http") {
 
 const fs$1 = require("fs");
 
-function compile(file, callback) {
+function compile(file, callback, object = {}) {
 	const page = `${this.dirname}/Views/${this.page}/${file}.html`;
 	// MARK: render page
 	fs$1.readFile(page, (err, data) => {
-		const d = mustache.render(data.toString(), this.components);
+		const obj = Object.assign(this.components, object);
+		const d = mustache.render(data.toString(), obj);
 		callback(d);
 	});
 }
@@ -819,6 +820,10 @@ class SegmentUI {
 	}
 	get http() {
 		return "http"
+	}
+
+	get Mustache() {
+		return mustache
 	}
 
 	/* Functions */
