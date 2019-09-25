@@ -6,13 +6,18 @@ function guard(cond, msg) {
 	}
 }
 
-function serve(page, p, type="http") {
+function serve(page, p, type = "http") {
 	// Imports controller
-	this.server = type
-	this.P = p
-	this.page = page
-	const P = require(`${this.dirname}/Views/${page}/index.js`)
-	this.current = new P(p, this)
+
+	const request = new this.Notification(page, {
+		server: type,
+		req: p.req,
+		res: p.res,
+		S: this,
+		page: page
+	})
+
+	this.NotificationCenter.default.post(request)
 }
 
 export default serve

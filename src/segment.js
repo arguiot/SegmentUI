@@ -3,12 +3,14 @@
 import load from "./functions/load.js"
 import serve from "./functions/serve.js"
 import compile from "./functions/compile.js"
-import end from "./functions/end.js"
 import Mustache from "./mustache/mustache.js"
+const { Notification, NotificationCenter } = require("@arguiot/broadcast.js")
+
 class SegmentUI {
 	constructor() {
 		this.layouts = {}
 		this.components = {}
+		this.pages = {}
 	}
 	/* Types */
 
@@ -23,6 +25,14 @@ class SegmentUI {
 		return Mustache
 	}
 
+	get Notification() {
+		return Notification
+	}
+
+	get NotificationCenter() {
+		return NotificationCenter
+	}
+
 	/* Functions */
 	load() {
 		const f = load.bind(this)
@@ -34,10 +44,6 @@ class SegmentUI {
 	}
 	compile() {
 		const f = compile.bind(this)
-		f(...arguments)
-	}
-	end() {
-		const f = end.bind(this)
 		f(...arguments)
 	}
 }

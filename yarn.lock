@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@arguiot/broadcast.js@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@arguiot/broadcast.js/-/broadcast.js-1.0.0.tgz#36aed9e4988baf734faeee7ac48dc365477b6051"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

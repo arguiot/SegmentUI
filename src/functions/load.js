@@ -18,29 +18,31 @@ function load(ctx) {
 	// Layouts
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
 		const name = file.split(".")[0]
-		this.layouts[name] = function(callback) {
+		this.layouts[name] = function(data, callback) {
 			// MARK: render page
-			fs.readFile(this.path, (err, data) => {
-				const d = data.toString()
+			fs.readFile(this.path, (err, b) => {
+				const d = b.toString()
 				const s = d.split("{{content}}")
-				switch (this.S.server) {
+				switch (data.server) {
 					case "express":
-						this.S.P.res.send(s[0])
+						data.res.send(s[0])
 						break;
 					default:
-						this.S.P.res.write(s[0])
+						data.res.write(s[0])
 				}
 				if (s.length > 1) {
 					callback(function(send) {
-						switch (this.S.server) {
+						switch (data.server) {
 							case "express":
-								this.S.P.res.send(send)
+								data.res.send(send)
 								break;
 							default:
-								this.S.P.res.write(send)
+								data.res.write(send)
 						}
+						data.res.end(s[1])
 					}.bind(this))
-					this.S.last = s[1]
+				} else {
+					data.res.end()
 				}
 			})
 		}.bind({
@@ -53,6 +55,12 @@ function load(ctx) {
 	fs.readdirSync(this.dirname + "/Components").forEach(file => {
 		const name = file.split(".")[0]
 		this.components[name] = fs.readFileSync(`${this.dirname}/Components/${file}`)
+	})
+	// Views
+	fs.readdirSync(this.dirname + "/Views").forEach(dir => {
+		const name = dir
+		const F = require(`${this.dirname}/Views/${dir}/index.js`)
+		this.pages[dir] = new F(this.NotificationCenter)
 	})
 }
 

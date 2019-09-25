@@ -1,15 +1,12 @@
 class Root {
-  constructor(p, S) {
-    this.params = p
-    this.S = S
-    this.body
+  constructor(NotificationCenter) {
+    NotificationCenter.default.addObserver("root", this.body)
   }
-  get body() {
-    const S = this.S
-    S.layouts.page(send => {
-		S.compile("default", d => {
+  body(data) {
+    const S = data.S
+    S.layouts.page(data, send => {
+		S.compile(data, "default", d => {
 			send(d)
-			this.S.end()
 		})
 	})
   }

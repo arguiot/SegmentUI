@@ -9,6 +9,9 @@
   "scripts": {
     "test": "rollup src/segment.js --file dist/segment.js --format cjs --intro \"/* Copyright © 2019 Arthur Guiot */\" && eye"
   },
+  "dependencies": {
+    "@arguiot/broadcast.js": "^1.0.0"
+  },
   "devDependencies": {
     "express": "^4.17.1",
     "eye.js": "^1.2.0",

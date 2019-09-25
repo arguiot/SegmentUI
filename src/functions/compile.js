@@ -8,8 +8,8 @@ function guard(cond, msg) {
 	}
 }
 
-function compile(file, callback, object = {}) {
-	const page = `${this.dirname}/Views/${this.page}/${file}.html`
+function compile(ctx, file, callback, object = {}) {
+	const page = `${this.dirname}/Views/${ctx.page}/${file}.html`
 	// MARK: render page
 	fs.readFile(page, (err, data) => {
 		const obj = Object.assign(this.components, object)

@@ -734,29 +734,31 @@ function load(ctx) {
 	// Layouts
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
 		const name = file.split(".")[0];
-		this.layouts[name] = function(callback) {
+		this.layouts[name] = function(data, callback) {
 			// MARK: render page
-			fs.readFile(this.path, (err, data) => {
-				const d = data.toString();
+			fs.readFile(this.path, (err, b) => {
+				const d = b.toString();
 				const s = d.split("{{content}}");
-				switch (this.S.server) {
+				switch (data.server) {
 					case "express":
-						this.S.P.res.send(s[0]);
+						data.res.send(s[0]);
 						break;
 					default:
-						this.S.P.res.write(s[0]);
+						data.res.write(s[0]);
 				}
 				if (s.length > 1) {
 					callback(function(send) {
-						switch (this.S.server) {
+						switch (data.server) {
 							case "express":
-								this.S.P.res.send(send);
+								data.res.send(send);
 								break;
 							default:
-								this.S.P.res.write(send);
+								data.res.write(send);
 						}
+						data.res.end(s[1]);
 					}.bind(this));
-					this.S.last = s[1];
+				} else {
+					data.res.end();
 				}
 			});
 		}.bind({
@@ -770,25 +772,35 @@ function load(ctx) {
 		const name = file.split(".")[0];
 		this.components[name] = fs.readFileSync(`${this.dirname}/Components/${file}`);
 	});
+	// Views
+	fs.readdirSync(this.dirname + "/Views").forEach(dir => {
+		const F = require(`${this.dirname}/Views/${dir}/index.js`);
+		this.pages[dir] = new F(this.NotificationCenter);
+	});
 }
 
 /* Copyright Arthur Guiot 2019, SegmentUI */
 
-function serve(page, p, type="http") {
+function serve(page, p, type = "http") {
 	// Imports controller
-	this.server = type;
-	this.P = p;
-	this.page = page;
-	const P = require(`${this.dirname}/Views/${page}/index.js`);
-	this.current = new P(p, this);
+
+	const request = new this.Notification(page, {
+		server: type,
+		req: p.req,
+		res: p.res,
+		S: this,
+		page: page
+	});
+
+	this.NotificationCenter.default.post(request);
 }
 
 /* Copyright Arthur Guiot 2019, SegmentUI */
 
 const fs$1 = require("fs");
 
-function compile(file, callback, object = {}) {
-	const page = `${this.dirname}/Views/${this.page}/${file}.html`;
+function compile(ctx, file, callback, object = {}) {
+	const page = `${this.dirname}/Views/${ctx.page}/${file}.html`;
 	// MARK: render page
 	fs$1.readFile(page, (err, data) => {
 		const obj = Object.assign(this.components, object);
@@ -798,20 +810,13 @@ function compile(file, callback, object = {}) {
 }
 
 /* Copyright Arthur Guiot 2019, SegmentUI */
+const { Notification, NotificationCenter } = require("@arguiot/broadcast.js");
 
-function end() {
-	if (typeof this.last != "undefined") {
-		this.P.res.end(this.last);
-		return
-	}
-	this.P.res.end(...arguments);
-}
-
-/* Copyright Arthur Guiot 2019, SegmentUI */
 class SegmentUI {
 	constructor() {
 		this.layouts = {};
 		this.components = {};
+		this.pages = {};
 	}
 	/* Types */
 
@@ -826,6 +831,14 @@ class SegmentUI {
 		return mustache
 	}
 
+	get Notification() {
+		return Notification
+	}
+
+	get NotificationCenter() {
+		return NotificationCenter
+	}
+
 	/* Functions */
 	load() {
 		const f = load.bind(this);
@@ -837,10 +850,6 @@ class SegmentUI {
 	}
 	compile() {
 		const f = compile.bind(this);
-		f(...arguments);
-	}
-	end() {
-		const f = end.bind(this);
 		f(...arguments);
 	}
 }
