@@ -6,7 +6,7 @@ function guard(cond, msg) {
 	}
 }
 
-async function serve(page, p, type="http") {
+function serve(page, p, type="http") {
 	// Imports controller
 	this.server = type
 	this.P = p

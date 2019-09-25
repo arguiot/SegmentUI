@@ -19,28 +19,25 @@ function load(ctx) {
 	fs.readdirSync(this.dirname + "/Layout").forEach(file => {
 		const name = file.split(".")[0]
 		this.layouts[name] = function(callback) {
-			if (callback == "path") {
-				return this.path
-			}
 			// MARK: render page
 			fs.readFile(this.path, (err, data) => {
 				const d = data.toString()
 				const s = d.split("{{content}}")
 				switch (this.S.server) {
 					case "express":
-						this.S.r[0].P.res.send(s[0])
+						this.S.P.res.send(s[0])
 						break;
 					default:
-						this.S.r[0].P.res.write(s[0])
+						this.S.P.res.write(s[0])
 				}
 				if (s.length > 1) {
 					callback(function(send) {
 						switch (this.S.server) {
 							case "express":
-								this.S.r[0].P.res.send(send)
+								this.S.P.res.send(send)
 								break;
 							default:
-								this.S.r[0].P.res.write(send)
+								this.S.P.res.write(send)
 						}
 					}.bind(this))
 					this.S.last = s[1]

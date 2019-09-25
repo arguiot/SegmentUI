@@ -9,7 +9,6 @@ class SegmentUI {
 	constructor() {
 		this.layouts = {}
 		this.components = {}
-		this.r = []
 	}
 	/* Types */
 
@@ -29,25 +28,8 @@ class SegmentUI {
 		const f = load.bind(this)
 		f(...arguments)
 	}
-	async serve() {
-		class SegmentServer extends SegmentUI {
-			constructor(layouts, components, dirname) {
-				super()
-				for (let f of Object.keys(layouts)) {
-					layouts[f].bind({
-						checked: true,
-						path: layouts[f]("path"),
-						S: this
-					})
-				}
-				this.layouts = layouts
-				this.components = components
-				this.dirname = dirname
-			}
-		}
-		const s = new SegmentServer(this.layouts, this.components, this.dirname)
-		this.r.push(s)
-		const f = serve.bind(s)
+	serve() {
+		const f = serve.bind(this)
 		f(...arguments)
 	}
 	compile() {

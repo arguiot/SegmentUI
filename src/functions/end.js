@@ -2,11 +2,10 @@
 
 function end() {
 	if (typeof this.last != "undefined") {
-		this.r[0].P.res.end(this.last)
+		this.P.res.end(this.last)
 		return
 	}
-	this.r[0].P.res.end(...arguments)
-	this.r = []
+	this.P.res.end(...arguments)
 }
 
 export default end
