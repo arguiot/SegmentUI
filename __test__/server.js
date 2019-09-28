@@ -21,8 +21,8 @@ const s = app.listen(port, () => console.log(`Example app listening on port ${po
 
 eye.test("Serving pages", "node",
 	$ => $("http://localhost:3000").fetch(data => {
-		const expected = fs.readFileSync(`${__testDir}/expected/t1.html`)
-		return data == expected
+		const expected = fs.readFileSync(`${__testDir}/expected/t1.html`).toString()
+		return data == expected ? true : "Didn't work..."
 	}),
 	$ => $("http://localhost:3000/page/Arthur").fetch(data => {
 		const expected = fs.readFileSync(`${__testDir}/expected/t2.html`)
