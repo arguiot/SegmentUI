@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "express": "^4.17.1",
-    "eye.js": "^1.2.0",
+    "eye.js": "^1.2.1",
     "rollup": "^1.20.3"
   }
 }
