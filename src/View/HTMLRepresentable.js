@@ -1,8 +1,7 @@
 import DOMRepresentable from "./DOMRepresentable"
 
 class HTMLRepresentable extends DOMRepresentable {
-    constructor(address, childs) {
-        this.selector = address
+    constructor(childs = []) {
         this.html = this.makeView(childs)
         this.childs = childs
     }
@@ -15,7 +14,13 @@ class HTMLRepresentable extends DOMRepresentable {
                 element.updateView(document.querySelector(element.selector), context)
             }
         });
-        this.updateView(document.querySelector(this.selector))
+        this.updateView(this.element, context)
+    }
+
+    setContext(context) {
+        this.context = context
+
+        this.childs.forEach(child => child.setContext(context))
     }
 
     /// Returns HTML string

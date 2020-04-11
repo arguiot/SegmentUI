@@ -2,11 +2,12 @@ import DOMRepresentable from "./DOMRepresentable"
 
 class View {
     get body() {
-        return {}
+        return ""
     }
 
     get html() {
         if (this.body instanceof DOMRepresentable) {
+            this.body.setContext(this.properties)
             return this.body.html
         }
         return ""
