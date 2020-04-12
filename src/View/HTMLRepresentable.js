@@ -1,6 +1,4 @@
-import DOMRepresentable from "./DOMRepresentable"
-
-class HTMLRepresentable extends DOMRepresentable {
+class HTMLRepresentable {
     constructor(childs = []) {
         this.html = this.makeView(childs)
         this.childs = childs
@@ -21,6 +19,11 @@ class HTMLRepresentable extends DOMRepresentable {
         this.context = context
 
         this.childs.forEach(child => child.setContext(context))
+    }
+    
+    /// Silently updates the view with the original View element
+    updateView(element, context) {
+
     }
 
     /// Returns HTML string

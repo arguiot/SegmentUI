@@ -1,4 +1,5 @@
 import DOMRepresentable from "./DOMRepresentable"
+import HTMLRepresentable from "./HTMLRepresentable"
 
 class View {
     get body() {
@@ -6,7 +7,7 @@ class View {
     }
 
     get html() {
-        if (this.body instanceof DOMRepresentable) {
+        if (this.body instanceof DOMRepresentable || this.body instanceof HTMLRepresentable) {
             this.body.setContext(this.properties)
             return this.body.html
         }
