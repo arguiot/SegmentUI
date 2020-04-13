@@ -1,11 +1,8 @@
-/* Copyright Arthur Guiot 2019, SegmentUI */
-
-import View from "./View/View"
-import DOMRepresentable from "./View/DOMRepresentable"
-import HTMLRepresentable from "./View/HTMLRepresentable"
-
+import View from "./Views/View"
+import State from "./Data/State"
+import register from "./Helpers/register"
 export default {
     View,
-    DOMRepresentable,
-    HTMLRepresentable
+    State,
+    register
 }

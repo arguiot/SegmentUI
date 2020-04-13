@@ -1,17 +1,8 @@
-const { View, DOMRepresentable, HTMLRepresentable } = require(__testDir + "../dist/segment.js")
+const { View } = require(__testDir + "../dist/segment.js")
 
-class TestHTML extends HTMLRepresentable {
-    makeView(childs) {
-        return  `<h1>This is a test
-        ${childs.map(el => el.html).join("")}
-        </h1>`
-    }
-}
 class TestView extends View {
-    get body() {
-        return new TestHTML([
-            new TestHTML()
-        ])
+    body(childs) {
+        return `<h1>${childs}</h1>`
     }
 }
 
