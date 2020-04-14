@@ -10,7 +10,20 @@
     "test": "rollup -c && eye"
   },
   "dependencies": {
-    "@arguiot/broadcast.js": "^1.0.0"
+    "@arguiot/broadcast.js": "^1.0.0",
+    "babel-register": "6.26.0",
+    "glob": "^7.1.2",
+    "jest-environment-node": "21.1.0",
+    "js-beautify": "1.7.3",
+    "mkdirp": "^0.5.1",
+    "outdent": "^0.4.1",
+    "parse5": "^3.0.2",
+    "preact": "8.2.5",
+    "prettier": "1.7.0",
+    "skatejs": "5.0.0-beta.3",
+    "uglify-es": "3.1.2",
+    "undom": "^0.3.3",
+    "yargs": "9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

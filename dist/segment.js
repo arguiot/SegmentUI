@@ -70,61 +70,6 @@
     }
   }
 
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
-    } else {
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) _setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-
-    return _construct.apply(null, arguments);
-  }
-
-  function _isNativeFunction(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-
-  function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : undefined;
-
-    _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null || !_isNativeFunction(Class)) return Class;
-
-      if (typeof Class !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class)) return _cache.get(Class);
-
-        _cache.set(Class, Wrapper);
-      }
-
-      function Wrapper() {
-        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-      }
-
-      Wrapper.prototype = Object.create(Class.prototype, {
-        constructor: {
-          value: Wrapper,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      });
-      return _setPrototypeOf(Wrapper, Class);
-    };
-
-    return _wrapNativeSuper(Class);
-  }
-
   function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -182,8 +127,31 @@
     });
   }
 
-  var View = /*#__PURE__*/function (_HTMLElement) {
-    _inherits(View, _HTMLElement);
+  // For NodeJS support
+  var FakeHTML = function FakeHTML() {};
+
+  FakeHTML.attachShadow = function () {
+    return this;
+  };
+
+  FakeHTML.innerHTML = "";
+
+  var HTMLView = function HTMLView() {
+    if (typeof HTMLElement != "undefined") {
+      Reflect.construct(HTMLElement, [], HTMLView);
+    } else {
+      Reflect.construct(FakeHTML, [], HTMLView);
+    }
+  };
+
+  if (typeof HTMLElement != "undefined") {
+    HTMLView.prototype = Object.create(HTMLElement);
+  } else {
+    HTMLView.prototype = Object.create(FakeHTML);
+  }
+
+  var View = /*#__PURE__*/function (_HTMLView) {
+    _inherits(View, _HTMLView);
 
     var _super = _createSuper(View);
 
@@ -196,6 +164,7 @@
       _this = _super.call(this);
       _this.rootElement = _this.shadowRoot;
       _this.childs = _this.innerHTML;
+      _this.states = [];
 
       _this.makeHTML();
 
@@ -266,7 +235,7 @@
     }]);
 
     return View;
-  }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+  }(HTMLView);
 
   function State(target, key, descriptor) {
     target["__internal_".concat(key)] = descriptor.value;

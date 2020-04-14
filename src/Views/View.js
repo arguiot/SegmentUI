@@ -1,5 +1,6 @@
 import handlebars from "../Helpers/Handlebars"
 
+
 class View extends HTMLElement {
     constructor() {
         // Always call super first in constructor
@@ -7,6 +8,7 @@ class View extends HTMLElement {
 
         this.rootElement = this.shadowRoot
         this.childs = this.innerHTML
+        this.states = []
 
         this.makeHTML()
     }
