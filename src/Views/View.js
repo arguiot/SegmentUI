@@ -1,5 +1,6 @@
 import handlebars from "../Helpers/Handlebars"
 
+typeof require == "function" ? require("../src/Server/register") : null
 
 class View extends HTMLElement {
     constructor() {
@@ -7,7 +8,20 @@ class View extends HTMLElement {
         super();
 
         this.rootElement = this.shadowRoot
+
+        // Childs
         this.childs = this.innerHTML
+        Object.defineProperty(this, "innerHTML", {
+            get() {
+                return this.childs;
+            },
+            set(value) {
+                this.childs = value;
+                this.render();
+            },
+            configurable: true
+        });
+        
         this.states = []
 
         this.makeHTML()
@@ -24,13 +38,16 @@ class View extends HTMLElement {
         return ""
     }
 
+    get html() {
+        return this.shadow.innerHTML
+    }
     /// The body template
     body(childs) {
         return childs
     }
     /// The CSS of your body
-    style() {
-
+    styles() {
+        return ""
     }
 
     // MARK: Interact with the DOM
@@ -48,7 +65,17 @@ class View extends HTMLElement {
 
     // MARK: Built-in
     render() {
+        const props = Object.fromEntries(this.states.map((key, i) => {
+            return [key, this[`__internal_${key}`]]
+        }))
 
+        this.shadow.innerHTML = this.body(
+            handlebars(this.childs, props)
+        )
+
+        const style = document.createElement("style")
+
+        style.textContent = this.styles()
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -60,17 +87,8 @@ class View extends HTMLElement {
         this.shadow = this.attachShadow({
             mode: this.hideShadow ? 'closed' : 'open'
         });
-        
-        const props = Object.fromEntries(this.states.map((key, i) => {
-            return [key, this[`__internal_${key}`]]
-        }))
 
-        this.shadow.innerHTML = this.body(
-            handlebars(this.childs, props)
-        )
-
-        const style = document.createElement("style")
-        style.textContent = this.style()
+        this.render()
     }
 }
 
