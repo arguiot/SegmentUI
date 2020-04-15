@@ -196,19 +196,7 @@
 
       // Always call super first in constructor
       _this = _super.call(this);
-      _this.rootElement = _this.shadowRoot; // Childs
-
-      _this.childs = _this.innerHTML;
-      Object.defineProperty(_assertThisInitialized(_this), "innerHTML", {
-        get: function get() {
-          return this.childs;
-        },
-        set: function set(value) {
-          this.childs = value;
-          this.render();
-        },
-        configurable: true
-      });
+      _this.rootElement = _this.shadowRoot;
       _this.states = [];
 
       _this.makeHTML();
@@ -252,9 +240,14 @@
         var props = Object.fromEntries(this.states.map(function (key, i) {
           return [key, _this2["__internal_".concat(key)]];
         }));
-        this.shadow.innerHTML = this.body(handlebars(this.childs, props));
+        this.shadow.innerHTML = this.body(handlebars(this.innerHTML, props));
         var style = document.createElement("style");
         style.textContent = this.styles();
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.render();
       }
     }, {
       key: "attributeChangedCallback",
@@ -273,6 +266,7 @@
     }, {
       key: "html",
       get: function get() {
+        this.render();
         return this.shadow.innerHTML;
       }
     }], [{
@@ -289,6 +283,64 @@
     }]);
 
     return View;
+  }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+
+  typeof require == "function" ? require("../src/Server/register") : null;
+
+  var Document = /*#__PURE__*/function (_HTMLElement) {
+    _inherits(Document, _HTMLElement);
+
+    var _super = _createSuper(Document);
+
+    function Document(model) {
+      var _this;
+
+      _classCallCheck(this, Document);
+
+      _this = _super.call(this);
+
+      if (typeof model == "undefined") {
+        _this.model = document.body;
+      }
+
+      _this.model = model;
+      _this.nodeName = "BODY";
+
+      _this.makeHTML();
+
+      return _this;
+    }
+
+    _createClass(Document, [{
+      key: "body",
+      value: function body() {
+        return this.model;
+      }
+    }, {
+      key: "render",
+      // MARK: Built-in
+      value: function render() {
+        this.innerHTML = this.body();
+      }
+    }, {
+      key: "attributeChangedCallback",
+      value: function attributeChangedCallback(attr, oldValue, newValue) {
+        this.render();
+      }
+    }, {
+      key: "makeHTML",
+      value: function makeHTML() {
+        this.render();
+        return this.innerHTML;
+      }
+    }, {
+      key: "html",
+      get: function get() {
+        return this.innerHTML;
+      }
+    }]);
+
+    return Document;
   }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
 
   function State(target, key, descriptor) {
@@ -311,14 +363,10 @@
     });
   }
 
-  function register(view) {
-    window.customElements.define(view.tag, view);
-  }
-
   var segment = {
     View: View,
     State: State,
-    register: register
+    Document: Document
   };
 
   return segment;

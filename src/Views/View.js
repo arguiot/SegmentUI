@@ -9,19 +9,6 @@ class View extends HTMLElement {
 
         this.rootElement = this.shadowRoot
 
-        // Childs
-        this.childs = this.innerHTML
-        Object.defineProperty(this, "innerHTML", {
-            get() {
-                return this.childs;
-            },
-            set(value) {
-                this.childs = value;
-                this.render();
-            },
-            configurable: true
-        });
-        
         this.states = []
 
         this.makeHTML()
@@ -39,6 +26,7 @@ class View extends HTMLElement {
     }
 
     get html() {
+        this.render()
         return this.shadow.innerHTML
     }
     /// The body template
@@ -68,16 +56,17 @@ class View extends HTMLElement {
         const props = Object.fromEntries(this.states.map((key, i) => {
             return [key, this[`__internal_${key}`]]
         }))
-
         this.shadow.innerHTML = this.body(
-            handlebars(this.childs, props)
+            handlebars(this.innerHTML, props)
         )
 
         const style = document.createElement("style")
 
         style.textContent = this.styles()
     }
-
+    connectedCallback () {
+        this.render()
+    }
     attributeChangedCallback(attr, oldValue, newValue) {
         this.render();
     }

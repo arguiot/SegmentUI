@@ -5,18 +5,15 @@ const {
 const shadowRootScript = `<script>function __ssr(){var s=document.currentScript,r=s.previousElementSibling,h=r.parentNode;h.removeChild(s);h.removeChild(r);r.parentNode.attachShadow({mode:f.getAttribute('mode')||'open'}).innerHTML=r.innerHTML;}</script>`;
 const shadowRootScriptCall = `<script>__ssr()</script>`;
 
-function defaultResolver(yup) {
-    setTimeout(() => yup(document));
-}
-
 function stringify(node) {
     let str = '';
-
+    if (typeof node == "undefined") {
+        return ''
+    }
     if (node.nodeName === '#document') {
         node = node.documentElement;
         str += '<!doctype html>';
     }
-
     if (node.nodeName === '#text') {
         return node.textContent;
     }
@@ -44,8 +41,6 @@ function stringify(node) {
     return str;
 }
 
-module.exports = (resolver = defaultResolver) => {
-    return new Promise(resolver).then(root => {
-        return stringify(root);
-    });
+module.exports = (doc = document) => {
+    return stringify(doc);
 };

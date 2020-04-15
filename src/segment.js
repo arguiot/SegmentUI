@@ -1,8 +1,8 @@
 import View from "./Views/View"
+import Document from "./Views/Document"
 import State from "./Data/State"
-import register from "./Helpers/register"
 export default {
     View,
     State,
-    register
+    Document
 }
