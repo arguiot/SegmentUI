@@ -13,7 +13,7 @@
     "@arguiot/broadcast.js": "^1.0.0",
     "babel-register": "6.26.0",
     "glob": "^7.1.2",
-    "jest-environment-node": "21.1.0",
+    "jest-environment-node": "23.0.0",
     "js-beautify": "1.7.3",
     "mkdirp": "^0.5.1",
     "outdent": "^0.4.1",
@@ -23,7 +23,7 @@
     "skatejs": "5.0.0-beta.3",
     "uglify-es": "3.1.2",
     "undom": "^0.3.3",
-    "yargs": "9.0.1"
+    "yargs": "13.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
