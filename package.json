@@ -13,7 +13,7 @@
     "@arguiot/broadcast.js": "^1.0.0",
     "babel-register": "6.26.0",
     "glob": "^7.1.2",
-    "jest-environment-node": "23.0.0",
+    "jest-environment-node": "24.0.0",
     "js-beautify": "1.7.3",
     "mkdirp": "^0.5.1",
     "outdent": "^0.4.1",
